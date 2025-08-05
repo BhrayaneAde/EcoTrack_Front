@@ -153,7 +153,7 @@ const Transactions = () => {
           variant="contained"
           color="primary"
           component={Link}
-          to="/transactions/create"
+          to="/transactions/add-transaction"
           startIcon={<MoneyIcon />}
         >
           Nouvelle transaction

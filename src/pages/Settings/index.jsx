@@ -113,15 +113,21 @@ export default function Settings() {
   ];
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>Configuration</Typography>
+    <Box p={{ xs: 1, md: 4 }}>
+      <Typography variant="h4" sx={{ fontWeight: 700, color: 'primary.main', mb: 3 }}>Configuration</Typography>
 
-      {status.error && <Alert severity="error" sx={{ mb: 2 }}>{status.error}</Alert>}
-      {status.success && <Alert severity="success" sx={{ mb: 2 }}>{status.success}</Alert>}
+      {status.error && <Alert severity="error" sx={{ borderRadius: 2, fontSize: 16, mb: 2 }}>{status.error}</Alert>}
+      {status.success && <Alert severity="success" sx={{ borderRadius: 2, fontSize: 16, mb: 2 }}>{status.success}</Alert>}
 
-      <Paper component="form" onSubmit={handleSave} sx={{ p: 3, mb: 3 }}>
+      <Paper component="form" onSubmit={handleSave} elevation={3} sx={{
+        p: { xs: 2, md: 3 },
+        mb: 4,
+        borderRadius: 3,
+        boxShadow: '0 2px 16px 0 rgba(25, 118, 210, 0.08)',
+        bgcolor: 'background.paper',
+      }}>
         {/* Devise par défaut */}
-        <FormControl fullWidth sx={{ mb: 3 }}>
+        <FormControl fullWidth sx={{ mb: 3, borderRadius: 2 }}>
           <InputLabel id="currency-label">Devise par défaut</InputLabel>
           <Select
             labelId="currency-label"
@@ -130,8 +136,8 @@ export default function Settings() {
             value={formData.defaultCurrency}
             onChange={handleFormChange}
             label="Devise par défaut"
+            sx={{ borderRadius: 2 }}
           >
-            {/* Tu peux remplacer par données dynamiques récupérées */}
             {['EUR', 'USD', 'XOF', 'GBP'].map(currency => (
               <MenuItem key={currency} value={currency}>
                 {currency} {currency === 'EUR' ? '(€)' : currency === 'USD' ? '($)' : currency === 'XOF' ? '(CFA)' : '(£)'}
@@ -141,12 +147,12 @@ export default function Settings() {
         </FormControl>
 
         {/* Catégories */}
-        <Typography variant="h6" gutterBottom>Catégories personnalisées</Typography>
+        <Typography variant="h6" gutterBottom sx={{ fontWeight: 700, color: 'primary.main', mb: 2 }}>Catégories personnalisées</Typography>
         <Grid container spacing={3} sx={{ mb: 3 }}>
           {categorySections.map(({ type, label, color, categories }) => (
             <Grid item xs={12} md={4} key={type}>
-              <Paper sx={{ p: 2, height: '100%' }}>
-                <Typography variant="subtitle1" color={`${color}.main`} gutterBottom>{label}</Typography>
+              <Paper elevation={2} sx={{ p: 2, height: '100%', borderRadius: 2, boxShadow: '0 2px 8px 0 rgba(25, 118, 210, 0.06)' }}>
+                <Typography variant="subtitle1" color={`${color}.main`} gutterBottom sx={{ fontWeight: 600 }}>{label}</Typography>
                 <TextField
                   fullWidth
                   size="small"
@@ -159,14 +165,14 @@ export default function Settings() {
                       handleAdd(type);
                     }
                   }}
-                  sx={{ mb: 1 }}
+                  sx={{ mb: 1, borderRadius: 2 }}
                 />
                 <Button
                   variant="outlined"
                   size="small"
                   color={color}
                   onClick={() => handleAdd(type)}
-                  sx={{ mb: 2 }}
+                  sx={{ mb: 2, borderRadius: 2, fontWeight: 600 }}
                 >
                   Ajouter
                 </Button>
@@ -179,6 +185,7 @@ export default function Settings() {
                       color={color}
                       variant="outlined"
                       size="small"
+                      sx={{ fontWeight: 600, fontSize: 15, borderRadius: 2 }}
                     />
                   ))}
                 </Box>
@@ -188,10 +195,10 @@ export default function Settings() {
         </Grid>
 
         {/* Paramètres de salaire */}
-        <Typography variant="h6" gutterBottom>Paramètres de salaire</Typography>
+        <Typography variant="h6" gutterBottom sx={{ fontWeight: 700, color: 'primary.main', mb: 2 }}>Paramètres de salaire</Typography>
         <Grid container spacing={2} sx={{ mb: 3 }}>
           <Grid item xs={12} md={4}>
-            <FormControl fullWidth>
+            <FormControl fullWidth sx={{ borderRadius: 2 }}>
               <InputLabel id="salaryFrequency-label">Fréquence</InputLabel>
               <Select
                 labelId="salaryFrequency-label"
@@ -200,6 +207,7 @@ export default function Settings() {
                 value={formData.salaryFrequency}
                 onChange={handleFormChange}
                 label="Fréquence"
+                sx={{ borderRadius: 2 }}
               >
                 {['Mensuel', 'Quinzaine', 'Hebdomadaire'].map(freq => (
                   <MenuItem key={freq} value={freq}>{freq}</MenuItem>
@@ -216,6 +224,7 @@ export default function Settings() {
               value={formData.salaryAmount}
               onChange={handleFormChange}
               placeholder="Montant du salaire"
+              sx={{ borderRadius: 2 }}
             />
           </Grid>
           <Grid item xs={12} md={4}>
@@ -227,6 +236,7 @@ export default function Settings() {
               value={formData.salaryDate}
               onChange={handleFormChange}
               InputLabelProps={{ shrink: true }}
+              sx={{ borderRadius: 2 }}
             />
           </Grid>
           <Grid item xs={12}>
@@ -237,6 +247,7 @@ export default function Settings() {
               value={formData.salaryLabel}
               onChange={handleFormChange}
               placeholder="Ex: Salaire principal"
+              sx={{ borderRadius: 2 }}
             />
           </Grid>
         </Grid>
@@ -248,6 +259,7 @@ export default function Settings() {
           size="large"
           fullWidth
           disabled={status.loading}
+          sx={{ borderRadius: 3, fontWeight: 700, fontSize: 18, py: 1.5, boxShadow: '0 2px 8px 0 rgba(25, 118, 210, 0.08)' }}
         >
           {status.loading ? 'Enregistrement...' : 'Enregistrer la configuration'}
         </Button>

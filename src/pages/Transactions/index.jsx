@@ -146,31 +146,46 @@ const Transactions = () => {
   };
 
   return (
-    <Box>
+    <Box p={{ xs: 1, md: 4 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <Typography variant="h4">Transactions</Typography>
+        <Typography variant="h4" sx={{ fontWeight: 700, color: 'primary.main' }}>Transactions</Typography>
         <Button
           variant="contained"
           color="primary"
           component={Link}
           to="/transactions/add-transaction"
           startIcon={<MoneyIcon />}
+          sx={{
+            borderRadius: 3,
+            fontWeight: 600,
+            px: 3,
+            py: 1.2,
+            fontSize: 16,
+            boxShadow: '0 2px 8px 0 rgba(25, 118, 210, 0.08)',
+          }}
         >
           Nouvelle transaction
         </Button>
       </Box>
 
       {/* Filtres */}
-      <Paper sx={{ p: 2, mb: 3 }}>
+      <Paper elevation={3} sx={{
+        p: { xs: 2, md: 3 },
+        mb: 4,
+        borderRadius: 3,
+        boxShadow: '0 2px 16px 0 rgba(25, 118, 210, 0.08)',
+        bgcolor: 'background.paper',
+      }}>
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12} md={3}>
-            <FormControl fullWidth size="small">
+            <FormControl fullWidth size="small" sx={{ borderRadius: 2 }}>
               <InputLabel>Type</InputLabel>
               <Select
                 name="type"
                 value={filters.type}
                 onChange={handleFilterChange}
                 label="Type"
+                sx={{ borderRadius: 2 }}
               >
                 <MenuItem value="all">Toutes</MenuItem>
                 <MenuItem value="expense">Dépenses</MenuItem>
@@ -179,13 +194,14 @@ const Transactions = () => {
             </FormControl>
           </Grid>
           <Grid item xs={6} md={2}>
-            <FormControl fullWidth size="small">
+            <FormControl fullWidth size="small" sx={{ borderRadius: 2 }}>
               <InputLabel>Mois</InputLabel>
               <Select
                 name="month"
                 value={filters.month}
                 onChange={handleFilterChange}
                 label="Mois"
+                sx={{ borderRadius: 2 }}
               >
                 {Array.from({ length: 12 }, (_, i) => (
                   <MenuItem key={i + 1} value={i + 1}>
@@ -196,13 +212,14 @@ const Transactions = () => {
             </FormControl>
           </Grid>
           <Grid item xs={6} md={2}>
-            <FormControl fullWidth size="small">
+            <FormControl fullWidth size="small" sx={{ borderRadius: 2 }}>
               <InputLabel>Année</InputLabel>
               <Select
                 name="year"
                 value={filters.year}
                 onChange={handleFilterChange}
                 label="Année"
+                sx={{ borderRadius: 2 }}
               >
                 {Array.from({ length: 5 }, (_, i) => {
                   const year = new Date().getFullYear() - 2 + i;
@@ -224,44 +241,58 @@ const Transactions = () => {
               value={filters.search}
               onChange={handleFilterChange}
               InputProps={{
-                startAdornment: <SearchIcon sx={{ mr: 1, color: 'text.secondary' }} />
+                startAdornment: <SearchIcon sx={{ mr: 1, color: 'text.secondary' }} />,
+                sx: { borderRadius: 2 }
               }}
+              sx={{ borderRadius: 2 }}
             />
           </Grid>
         </Grid>
       </Paper>
 
       {/* Liste des transactions */}
-      <Paper sx={{ p: 2 }}>
+      <Paper elevation={3} sx={{
+        p: { xs: 2, md: 3 },
+        borderRadius: 3,
+        boxShadow: '0 2px 16px 0 rgba(25, 118, 210, 0.08)',
+        bgcolor: 'background.paper',
+      }}>
         {loading ? (
           <Box display="flex" justifyContent="center" p={4}>
             <CircularProgress />
           </Box>
         ) : error ? (
           <Box p={2}>
-            <Alert severity="error">{error}</Alert>
+            <Alert severity="error" sx={{ borderRadius: 2, fontSize: 16 }}>{error}</Alert>
           </Box>
         ) : filteredTransactions.length === 0 ? (
           <Box p={2} textAlign="center">
-            <Typography variant="body1" color="textSecondary">
+            <Typography variant="body1" color="textSecondary" sx={{ fontSize: 18 }}>
               Aucune transaction trouvée
             </Typography>
           </Box>
         ) : (
-          <TableContainer>
+          <TableContainer sx={{ borderRadius: 3, boxShadow: '0 2px 12px 0 rgba(60,72,100,0.07)' }}>
             <Table>
               <TableHead>
-                <TableRow>
-                  <TableCell>Date</TableCell>
-                  <TableCell>Description</TableCell>
-                  <TableCell>Catégorie</TableCell>
-                  <TableCell align="right">Montant</TableCell>
-                  <TableCell align="right">Actions</TableCell>
+                <TableRow sx={{ bgcolor: 'background.default' }}>
+                  <TableCell sx={{ fontWeight: 700, color: 'primary.main', fontSize: 16 }}>Date</TableCell>
+                  <TableCell sx={{ fontWeight: 700, color: 'primary.main', fontSize: 16 }}>Description</TableCell>
+                  <TableCell sx={{ fontWeight: 700, color: 'primary.main', fontSize: 16 }}>Catégorie</TableCell>
+                  <TableCell align="right" sx={{ fontWeight: 700, color: 'primary.main', fontSize: 16 }}>Montant</TableCell>
+                  <TableCell align="right" sx={{ fontWeight: 700, color: 'primary.main', fontSize: 16 }}>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {filteredTransactions.map((transaction) => (
-                  <TableRow key={`${transaction.type}-${transaction.id}`}>
+                {filteredTransactions.map((transaction, idx) => (
+                  <TableRow
+                    key={`${transaction.type}-${transaction.id}`}
+                    sx={{
+                      bgcolor: idx % 2 === 0 ? 'background.default' : '#fff',
+                      transition: 'background 0.2s',
+                      '&:hover': { bgcolor: 'primary.50' },
+                    }}
+                  >
                     <TableCell>{formatDate(transaction.date)}</TableCell>
                     <TableCell>{transaction.description || 'Sans description'}</TableCell>
                     <TableCell>
@@ -269,13 +300,15 @@ const Transactions = () => {
                         label={transaction.categorie} 
                         size="small"
                         color={transaction.type === 'expense' ? 'error' : 'success'}
+                        sx={{ fontWeight: 600, fontSize: 15, borderRadius: 2 }}
                       />
                     </TableCell>
                     <TableCell 
                       align="right" 
                       sx={{
                         color: transaction.type === 'expense' ? 'error.main' : 'success.main',
-                        fontWeight: 'medium'
+                        fontWeight: 700,
+                        fontSize: 16
                       }}
                     >
                       {formatCurrency(Math.abs(transaction.amount))}
@@ -285,6 +318,7 @@ const Transactions = () => {
                         size="small" 
                         component={Link}
                         to={`/${transaction.type}s/edit/${transaction.id}`}
+                        sx={{ borderRadius: 2 }}
                       >
                         <EditIcon fontSize="small" />
                       </IconButton>
@@ -292,6 +326,7 @@ const Transactions = () => {
                         size="small" 
                         onClick={() => handleDelete(transaction.id, transaction.type)}
                         color="error"
+                        sx={{ borderRadius: 2 }}
                       >
                         <DeleteIcon fontSize="small" />
                       </IconButton>

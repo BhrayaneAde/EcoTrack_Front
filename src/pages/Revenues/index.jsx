@@ -156,8 +156,10 @@ export default function Revenues() {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>Revenus</Typography>
+    <Box p={{ xs: 1, md: 4 }}>
+      <Typography variant="h4" gutterBottom sx={{ fontWeight: 700, color: 'primary.main', mb: 3, textAlign: 'left' }}>
+        Revenus
+      </Typography>
 
       {status.loading && (
         <Box display="flex" justifyContent="center" my={2}>
@@ -167,7 +169,7 @@ export default function Revenues() {
       {status.error && (
         <Alert
           severity="error"
-          sx={{ mb: 2 }}
+          sx={{ mb: 2, borderRadius: 2, fontSize: 16 }}
           onClose={() => setStatus(prev => ({ ...prev, error: null }))}
         >
           {status.error}
@@ -176,15 +178,23 @@ export default function Revenues() {
       {status.success && (
         <Alert
           severity="success"
-          sx={{ mb: 2 }}
+          sx={{ mb: 2, borderRadius: 2, fontSize: 16 }}
           onClose={() => setStatus(prev => ({ ...prev, success: null }))}
         >
           {status.success}
         </Alert>
       )}
 
-      <Paper component="form" onSubmit={handleSubmit} sx={{ p: 3, mb: 3 }}>
-        <Typography variant="h6" gutterBottom>Ajouter un revenu</Typography>
+      <Paper component="form" onSubmit={handleSubmit} elevation={3} sx={{
+        p: { xs: 2, md: 3 },
+        mb: 4,
+        borderRadius: 3,
+        boxShadow: '0 2px 16px 0 rgba(25, 118, 210, 0.08)',
+        bgcolor: 'background.paper',
+      }}>
+        <Typography variant="h6" gutterBottom sx={{ fontWeight: 700, color: 'primary.main', mb: 2 }}>
+          Ajouter un revenu
+        </Typography>
 
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6} md={3}>
@@ -198,19 +208,21 @@ export default function Revenues() {
               onChange={handleChange}
               inputProps={{ step: '0.01', min: '0' }}
               InputProps={{
-                startAdornment: currency + ' ',
+                startAdornment: <span style={{ color: '#1976d2', fontWeight: 600 }}>{currency}</span>,
+                sx: { borderRadius: 2, fontWeight: 600 }
               }}
             />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <FormControl fullWidth required>
+            <FormControl fullWidth required sx={{ borderRadius: 2 }}>
               <InputLabel>Catégorie</InputLabel>
               <Select
                 name="categoryId"
                 value={formData.categoryId}
                 onChange={handleChange}
                 label="Catégorie"
+                sx={{ borderRadius: 2 }}
               >
                 {categories.map(category => (
                   <MenuItem key={category.id} value={category.id}>
@@ -232,6 +244,7 @@ export default function Revenues() {
               InputLabelProps={{
                 shrink: true,
               }}
+              sx={{ borderRadius: 2 }}
             />
           </Grid>
 
@@ -243,15 +256,24 @@ export default function Revenues() {
               value={formData.description}
               onChange={handleChange}
               placeholder="Facultatif"
+              sx={{ borderRadius: 2 }}
             />
           </Grid>
 
-          <Grid item xs={12} sx={{ textAlign: 'right' }}>
+          <Grid item xs={12} sx={{ textAlign: { xs: 'center', md: 'right' }, mt: 2 }}>
             <Button
               type="submit"
               variant="contained"
               color="primary"
               startIcon={<AddIcon />}
+              sx={{
+                borderRadius: 3,
+                fontWeight: 600,
+                px: 3,
+                py: 1.2,
+                fontSize: 16,
+                boxShadow: '0 2px 8px 0 rgba(25, 118, 210, 0.08)',
+              }}
             >
               Ajouter le revenu
             </Button>
@@ -259,32 +281,46 @@ export default function Revenues() {
         </Grid>
       </Paper>
 
-      <Paper sx={{ p: 3 }}>
-        <Typography variant="h6" gutterBottom>Historique des revenus</Typography>
+      <Paper elevation={3} sx={{
+        p: { xs: 2, md: 3 },
+        borderRadius: 3,
+        boxShadow: '0 2px 16px 0 rgba(25, 118, 210, 0.08)',
+        bgcolor: 'background.paper',
+      }}>
+        <Typography variant="h6" gutterBottom sx={{ fontWeight: 700, color: 'primary.main', mb: 2 }}>
+          Historique des revenus
+        </Typography>
 
         {revenues.length === 0 ? (
           <Typography variant="body1" color="textSecondary" sx={{ textAlign: 'center', py: 4 }}>
             Aucun revenu enregistré pour le moment
           </Typography>
         ) : (
-          <TableContainer>
+          <TableContainer sx={{ borderRadius: 3, boxShadow: '0 2px 12px 0 rgba(60,72,100,0.07)' }}>
             <Table>
               <TableHead>
-                <TableRow>
-                  <TableCell>Date</TableCell>
-                  <TableCell>Catégorie</TableCell>
-                  <TableCell>Description</TableCell>
-                  <TableCell align="right">Montant</TableCell>
-                  <TableCell align="right">Actions</TableCell>
+                <TableRow sx={{ bgcolor: 'background.default' }}>
+                  <TableCell sx={{ fontWeight: 700, color: 'primary.main', fontSize: 16 }}>Date</TableCell>
+                  <TableCell sx={{ fontWeight: 700, color: 'primary.main', fontSize: 16 }}>Catégorie</TableCell>
+                  <TableCell sx={{ fontWeight: 700, color: 'primary.main', fontSize: 16 }}>Description</TableCell>
+                  <TableCell align="right" sx={{ fontWeight: 700, color: 'primary.main', fontSize: 16 }}>Montant</TableCell>
+                  <TableCell align="right" sx={{ fontWeight: 700, color: 'primary.main', fontSize: 16 }}>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {revenues.map(revenue => (
-                  <TableRow key={revenue.id}>
+                {revenues.map((revenue, idx) => (
+                  <TableRow
+                    key={revenue.id}
+                    sx={{
+                      bgcolor: idx % 2 === 0 ? 'background.default' : '#fff',
+                      transition: 'background 0.2s',
+                      '&:hover': { bgcolor: 'primary.50' },
+                    }}
+                  >
                     <TableCell>{new Date(revenue.date).toLocaleDateString()}</TableCell>
                     <TableCell>{getCategoryNameById(revenue.categorie_id)}</TableCell>
                     <TableCell>{revenue.description || '-'}</TableCell>
-                    <TableCell align="right">
+                    <TableCell align="right" sx={{ fontWeight: 700, color: 'success.main', fontSize: 16 }}>
                       {typeof revenue.montant === 'number' ? revenue.montant.toLocaleString('fr-FR', {
                         style: 'currency',
                         currency: currency,
@@ -297,6 +333,7 @@ export default function Revenues() {
                         size="small"
                         onClick={() => handleEdit(revenue)}
                         color="primary"
+                        sx={{ borderRadius: 2 }}
                       >
                         <EditIcon fontSize="small" />
                       </IconButton>
@@ -304,6 +341,7 @@ export default function Revenues() {
                         size="small"
                         onClick={() => handleDelete(revenue.id)}
                         color="error"
+                        sx={{ borderRadius: 2 }}
                       >
                         <DeleteIcon fontSize="small" />
                       </IconButton>

@@ -130,15 +130,25 @@ export default function Expenses() {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>Dépenses</Typography>
+    <Box p={{ xs: 1, md: 4 }}>
+      <Typography variant="h4" gutterBottom sx={{ fontWeight: 700, color: 'error.main', mb: 3, textAlign: 'left' }}>
+        Dépenses
+      </Typography>
 
       {status.loading && <Box display="flex" justifyContent="center" my={2}><CircularProgress /></Box>}
-      {status.error && <Alert severity="error" sx={{ mb: 2 }} onClose={() => setStatus(prev => ({ ...prev, error: null }))}>{status.error}</Alert>}
-      {status.success && <Alert severity="success" sx={{ mb: 2 }} onClose={() => setStatus(prev => ({ ...prev, success: null }))}>{status.success}</Alert>}
+      {status.error && <Alert severity="error" sx={{ mb: 2, borderRadius: 2, fontSize: 16 }} onClose={() => setStatus(prev => ({ ...prev, error: null }))}>{status.error}</Alert>}
+      {status.success && <Alert severity="success" sx={{ mb: 2, borderRadius: 2, fontSize: 16 }} onClose={() => setStatus(prev => ({ ...prev, success: null }))}>{status.success}</Alert>}
 
-      <Paper component="form" onSubmit={handleSubmit} sx={{ p: 3, mb: 3 }}>
-        <Typography variant="h6" gutterBottom>Ajouter une dépense</Typography>
+      <Paper component="form" onSubmit={handleSubmit} elevation={3} sx={{
+        p: { xs: 2, md: 3 },
+        mb: 4,
+        borderRadius: 3,
+        boxShadow: '0 2px 16px 0 rgba(229, 57, 53, 0.08)',
+        bgcolor: 'background.paper',
+      }}>
+        <Typography variant="h6" gutterBottom sx={{ fontWeight: 700, color: 'error.main', mb: 2 }}>
+          Ajouter une dépense
+        </Typography>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6} md={3}>
             <TextField
@@ -146,18 +156,20 @@ export default function Expenses() {
               value={formData.amount} onChange={handleChange}
               inputProps={{ step: '0.01', min: '0' }}
               InputProps={{
-                startAdornment: <InputAdornment position="start">{currency}</InputAdornment>
+                startAdornment: <InputAdornment position="start" sx={{ color: 'error.main', fontWeight: 600 }}>{currency}</InputAdornment>,
+                sx: { borderRadius: 2, fontWeight: 600 }
               }}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <FormControl fullWidth required>
+            <FormControl fullWidth required sx={{ borderRadius: 2 }}>
               <InputLabel>Catégorie</InputLabel>
               <Select
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
                 label="Catégorie"
+                sx={{ borderRadius: 2 }}
               >
                 {categories.map((cat) => (
                   <MenuItem key={cat.name || cat} value={cat.name || cat}>{cat.name || cat}</MenuItem>
@@ -170,6 +182,7 @@ export default function Expenses() {
               fullWidth label="Date" name="date" type="date"
               value={formData.date} onChange={handleChange}
               InputLabelProps={{ shrink: true }}
+              sx={{ borderRadius: 2 }}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
@@ -177,49 +190,73 @@ export default function Expenses() {
               fullWidth label="Description" name="description"
               value={formData.description} onChange={handleChange}
               placeholder="Facultatif"
+              sx={{ borderRadius: 2 }}
             />
           </Grid>
-          <Grid item xs={12} sx={{ textAlign: 'right' }}>
-            <Button type="submit" variant="contained" color="primary" startIcon={<AddIcon />}>Ajouter la dépense</Button>
+          <Grid item xs={12} sx={{ textAlign: { xs: 'center', md: 'right' }, mt: 2 }}>
+            <Button type="submit" variant="contained" color="error" startIcon={<AddIcon />}
+              sx={{
+                borderRadius: 3,
+                fontWeight: 600,
+                px: 3,
+                py: 1.2,
+                fontSize: 16,
+                boxShadow: '0 2px 8px 0 rgba(229, 57, 53, 0.08)',
+              }}
+            >Ajouter la dépense</Button>
           </Grid>
         </Grid>
       </Paper>
 
-      <Paper sx={{ p: 3 }}>
-        <Typography variant="h6" gutterBottom>Historique des dépenses</Typography>
+      <Paper elevation={3} sx={{
+        p: { xs: 2, md: 3 },
+        borderRadius: 3,
+        boxShadow: '0 2px 16px 0 rgba(229, 57, 53, 0.08)',
+        bgcolor: 'background.paper',
+      }}>
+        <Typography variant="h6" gutterBottom sx={{ fontWeight: 700, color: 'error.main', mb: 2 }}>
+          Historique des dépenses
+        </Typography>
         {expenses.length === 0 ? (
           <Typography variant="body1" color="textSecondary" sx={{ textAlign: 'center', py: 4 }}>
             Aucune dépense enregistrée pour le moment
           </Typography>
         ) : (
-          <TableContainer>
+          <TableContainer sx={{ borderRadius: 3, boxShadow: '0 2px 12px 0 rgba(60,72,100,0.07)' }}>
             <Table>
               <TableHead>
-                <TableRow>
-                  <TableCell>Date</TableCell>
-                  <TableCell>Catégorie</TableCell>
-                  <TableCell>Description</TableCell>
-                  <TableCell align="right">Montant</TableCell>
-                  <TableCell align="right">Actions</TableCell>
+                <TableRow sx={{ bgcolor: 'background.default' }}>
+                  <TableCell sx={{ fontWeight: 700, color: 'error.main', fontSize: 16 }}>Date</TableCell>
+                  <TableCell sx={{ fontWeight: 700, color: 'error.main', fontSize: 16 }}>Catégorie</TableCell>
+                  <TableCell sx={{ fontWeight: 700, color: 'error.main', fontSize: 16 }}>Description</TableCell>
+                  <TableCell align="right" sx={{ fontWeight: 700, color: 'error.main', fontSize: 16 }}>Montant</TableCell>
+                  <TableCell align="right" sx={{ fontWeight: 700, color: 'error.main', fontSize: 16 }}>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {expenses.map((exp) => (
-                  <TableRow key={exp.id}>
+                {expenses.map((exp, idx) => (
+                  <TableRow
+                    key={exp.id}
+                    sx={{
+                      bgcolor: idx % 2 === 0 ? 'background.default' : '#fff',
+                      transition: 'background 0.2s',
+                      '&:hover': { bgcolor: 'error.50' },
+                    }}
+                  >
                     <TableCell>{exp.date ? new Date(exp.date).toLocaleDateString() : '-'}</TableCell>
                     <TableCell>{exp.category || exp.categorie}</TableCell>
                     <TableCell>{exp.description || '-'}</TableCell>
-                    <TableCell align="right">
+                    <TableCell align="right" sx={{ fontWeight: 700, color: 'error.main', fontSize: 16 }}>
                       {Number(exp.amount || exp.montant || 0).toLocaleString('fr-FR', {
                         style: 'currency', currency,
                         minimumFractionDigits: 0, maximumFractionDigits: 0
                       })}
                     </TableCell>
                     <TableCell align="right">
-                      <IconButton size="small" onClick={() => handleEdit(exp)} color="primary">
+                      <IconButton size="small" onClick={() => handleEdit(exp)} color="error" sx={{ borderRadius: 2 }}>
                         <EditIcon fontSize="small" />
                       </IconButton>
-                      <IconButton size="small" onClick={() => handleDelete(exp.id)} color="error">
+                      <IconButton size="small" onClick={() => handleDelete(exp.id)} color="primary" sx={{ borderRadius: 2 }}>
                         <DeleteIcon fontSize="small" />
                       </IconButton>
                     </TableCell>

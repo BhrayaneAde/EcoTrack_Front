@@ -151,17 +151,17 @@ const Budget = () => {
     : 0;
 
   return (
-    <Box>
+    <Box p={{ xs: 1, md: 4 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <Typography variant="h4">Budget</Typography>
-        
+        <Typography variant="h4" sx={{ fontWeight: 700, color: 'primary.main', textAlign: 'left' }}>Budget</Typography>
         <Box display="flex" gap={2}>
-          <FormControl size="small" sx={{ minWidth: 120 }}>
+          <FormControl size="small" sx={{ minWidth: 120, borderRadius: 2 }}>
             <InputLabel>Mois</InputLabel>
             <Select
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.target.value)}
               label="Mois"
+              sx={{ borderRadius: 2 }}
             >
               {Array.from({ length: 12 }, (_, i) => (
                 <MenuItem key={i + 1} value={i + 1}>
@@ -170,13 +170,13 @@ const Budget = () => {
               ))}
             </Select>
           </FormControl>
-          
-          <FormControl size="small" sx={{ minWidth: 120 }}>
+          <FormControl size="small" sx={{ minWidth: 120, borderRadius: 2 }}>
             <InputLabel>Année</InputLabel>
             <Select
               value={selectedYear}
               onChange={(e) => setSelectedYear(e.target.value)}
               label="Année"
+              sx={{ borderRadius: 2 }}
             >
               {Array.from({ length: 5 }, (_, i) => {
                 const year = new Date().getFullYear() - 2 + i;
@@ -194,41 +194,26 @@ const Budget = () => {
       {/* Résumé du budget */}
       <Grid container spacing={3} mb={3}>
         <Grid item xs={12} md={4}>
-          <Card>
+          <Card elevation={3} sx={{ borderRadius: 3, boxShadow: '0 2px 16px 0 rgba(25, 118, 210, 0.08)' }}>
             <CardContent>
-              <Typography color="textSecondary" gutterBottom>
-                Budget total
-              </Typography>
-              <Typography variant="h5">
-                {formatCurrency(totalBudget)}
-              </Typography>
+              <Typography color="textSecondary" gutterBottom sx={{ fontWeight: 600 }}>Budget total</Typography>
+              <Typography variant="h5" sx={{ fontWeight: 700 }}>{formatCurrency(totalBudget)}</Typography>
             </CardContent>
           </Card>
         </Grid>
         <Grid item xs={12} md={4}>
-          <Card>
+          <Card elevation={3} sx={{ borderRadius: 3, boxShadow: '0 2px 16px 0 rgba(229, 57, 53, 0.08)' }}>
             <CardContent>
-              <Typography color="textSecondary" gutterBottom>
-                Dépenses totales
-              </Typography>
-              <Typography variant="h5" color={totalSpent > totalBudget ? 'error' : 'primary'}>
-                {formatCurrency(totalSpent)}
-              </Typography>
+              <Typography color="textSecondary" gutterBottom sx={{ fontWeight: 600 }}>Dépenses totales</Typography>
+              <Typography variant="h5" sx={{ fontWeight: 700, color: totalSpent > totalBudget ? 'error.main' : 'primary.main' }}>{formatCurrency(totalSpent)}</Typography>
             </CardContent>
           </Card>
         </Grid>
         <Grid item xs={12} md={4}>
-          <Card>
+          <Card elevation={3} sx={{ borderRadius: 3, boxShadow: '0 2px 16px 0 rgba(67, 160, 71, 0.08)' }}>
             <CardContent>
-              <Typography color="textSecondary" gutterBottom>
-                Budget restant
-              </Typography>
-              <Typography 
-                variant="h5" 
-                color={totalBudget - totalSpent < 0 ? 'error' : 'success'}
-              >
-                {formatCurrency(totalBudget - totalSpent)}
-              </Typography>
+              <Typography color="textSecondary" gutterBottom sx={{ fontWeight: 600 }}>Budget restant</Typography>
+              <Typography variant="h5" sx={{ fontWeight: 700, color: totalBudget - totalSpent < 0 ? 'error.main' : 'success.main' }}>{formatCurrency(totalBudget - totalSpent)}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -237,33 +222,38 @@ const Budget = () => {
       {/* Barre de progression du budget global */}
       <Box mb={3}>
         <Box display="flex" justifyContent="space-between" mb={1}>
-          <Typography>Utilisation du budget global</Typography>
-          <Typography>{totalBudgetPercentage}%</Typography>
+          <Typography sx={{ fontWeight: 600 }}>Utilisation du budget global</Typography>
+          <Typography sx={{ fontWeight: 600 }}>{totalBudgetPercentage}%</Typography>
         </Box>
         <LinearProgress 
           variant="determinate" 
           value={totalBudgetPercentage} 
           color={totalBudgetPercentage > 90 ? 'error' : 'primary'}
-          sx={{ height: 10, borderRadius: 5 }}
+          sx={{ height: 12, borderRadius: 5, boxShadow: '0 2px 8px 0 rgba(25, 118, 210, 0.08)' }}
         />
       </Box>
 
       {/* Ajouter un nouveau budget */}
-      <Paper sx={{ p: 2, mb: 3 }}>
-        <Typography variant="h6" gutterBottom>Ajouter un budget</Typography>
+      <Paper elevation={3} sx={{
+        p: { xs: 2, md: 3 },
+        mb: 4,
+        borderRadius: 3,
+        boxShadow: '0 2px 16px 0 rgba(25, 118, 210, 0.08)',
+        bgcolor: 'background.paper',
+      }}>
+        <Typography variant="h6" gutterBottom sx={{ fontWeight: 700, color: 'primary.main', mb: 2 }}>Ajouter un budget</Typography>
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12} md={5}>
-            <FormControl fullWidth size="small">
+            <FormControl fullWidth size="small" sx={{ borderRadius: 2 }}>
               <InputLabel>Catégorie</InputLabel>
               <Select
                 value={newBudget.category}
                 onChange={(e) => setNewBudget({...newBudget, category: e.target.value})}
                 label="Catégorie"
+                sx={{ borderRadius: 2 }}
               >
                 {categories.map((category) => (
-                  <MenuItem key={category.id} value={category.id}>
-                    {category.name}
-                  </MenuItem>
+                  <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -277,7 +267,8 @@ const Budget = () => {
               value={newBudget.amount}
               onChange={(e) => setNewBudget({...newBudget, amount: e.target.value})}
               InputProps={{
-                startAdornment: 'FCFA ',
+                startAdornment: <span style={{ color: '#1976d2', fontWeight: 600 }}>FCFA</span>,
+                sx: { borderRadius: 2, fontWeight: 600 }
               }}
             />
           </Grid>
@@ -289,6 +280,14 @@ const Budget = () => {
               onClick={handleAddBudget}
               disabled={!newBudget.category || !newBudget.amount}
               startIcon={<AddIcon />}
+              sx={{
+                borderRadius: 3,
+                fontWeight: 600,
+                px: 3,
+                py: 1.2,
+                fontSize: 16,
+                boxShadow: '0 2px 8px 0 rgba(25, 118, 210, 0.08)',
+              }}
             >
               Ajouter
             </Button>
@@ -302,46 +301,53 @@ const Budget = () => {
           <CircularProgress />
         </Box>
       ) : error ? (
-        <Alert severity="error">{error}</Alert>
+        <Alert severity="error" sx={{ borderRadius: 2, fontSize: 16 }}>{error}</Alert>
       ) : budgets.length === 0 ? (
-        <Paper sx={{ p: 3, textAlign: 'center' }}>
+        <Paper elevation={3} sx={{ p: 3, textAlign: 'center', borderRadius: 3, boxShadow: '0 2px 16px 0 rgba(25, 118, 210, 0.08)' }}>
           <Typography color="textSecondary">
             Aucun budget défini pour le moment. Ajoutez votre premier budget ci-dessus.
           </Typography>
         </Paper>
       ) : (
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} sx={{ borderRadius: 3, boxShadow: '0 2px 12px 0 rgba(60,72,100,0.07)' }}>
           <Table>
             <TableHead>
-              <TableRow>
-                <TableCell>Catégorie</TableCell>
-                <TableCell align="right">Budget</TableCell>
-                <TableCell align="right">Dépensé</TableCell>
-                <TableCell align="right">Reste</TableCell>
-                <TableCell align="center">Progression</TableCell>
-                <TableCell align="right">Actions</TableCell>
+              <TableRow sx={{ bgcolor: 'background.default' }}>
+                <TableCell sx={{ fontWeight: 700, color: 'primary.main', fontSize: 16 }}>Catégorie</TableCell>
+                <TableCell align="right" sx={{ fontWeight: 700, color: 'primary.main', fontSize: 16 }}>Budget</TableCell>
+                <TableCell align="right" sx={{ fontWeight: 700, color: 'primary.main', fontSize: 16 }}>Dépensé</TableCell>
+                <TableCell align="right" sx={{ fontWeight: 700, color: 'primary.main', fontSize: 16 }}>Reste</TableCell>
+                <TableCell align="center" sx={{ fontWeight: 700, color: 'primary.main', fontSize: 16 }}>Progression</TableCell>
+                <TableCell align="right" sx={{ fontWeight: 700, color: 'primary.main', fontSize: 16 }}>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {budgets.map((budget) => {
+              {budgets.map((budget, idx) => {
                 const spent = calculateCategorySpending(budget.categoryId);
                 const remaining = budget.amount - spent;
                 const percentage = calculateBudgetPercentage(budget.categoryId, budget.amount);
-                
                 return (
-                  <TableRow key={budget.id}>
+                  <TableRow
+                    key={budget.id}
+                    sx={{
+                      bgcolor: idx % 2 === 0 ? 'background.default' : '#fff',
+                      transition: 'background 0.2s',
+                      '&:hover': { bgcolor: 'primary.50' },
+                    }}
+                  >
                     <TableCell>
                       <Chip 
                         label={budget.category} 
                         size="small" 
                         color={percentage > 90 ? 'error' : 'default'}
+                        sx={{ fontWeight: 600, fontSize: 15, borderRadius: 2 }}
                       />
                     </TableCell>
-                    <TableCell align="right">{formatCurrency(budget.amount)}</TableCell>
-                    <TableCell align="right">{formatCurrency(spent)}</TableCell>
+                    <TableCell align="right" sx={{ fontWeight: 700, color: 'primary.main', fontSize: 16 }}>{formatCurrency(budget.amount)}</TableCell>
+                    <TableCell align="right" sx={{ fontWeight: 700, color: 'error.main', fontSize: 16 }}>{formatCurrency(spent)}</TableCell>
                     <TableCell 
                       align="right"
-                      sx={{ color: remaining < 0 ? 'error.main' : 'success.main' }}
+                      sx={{ fontWeight: 700, color: remaining < 0 ? 'error.main' : 'success.main', fontSize: 16 }}
                     >
                       {formatCurrency(remaining)}
                     </TableCell>
@@ -363,13 +369,14 @@ const Budget = () => {
                       </Box>
                     </TableCell>
                     <TableCell align="right">
-                      <IconButton size="small">
+                      <IconButton size="small" sx={{ borderRadius: 2 }}>
                         <EditIcon fontSize="small" />
                       </IconButton>
                       <IconButton 
                         size="small" 
                         onClick={() => handleDeleteBudget(budget.id)}
                         color="error"
+                        sx={{ borderRadius: 2 }}
                       >
                         <DeleteIcon fontSize="small" />
                       </IconButton>

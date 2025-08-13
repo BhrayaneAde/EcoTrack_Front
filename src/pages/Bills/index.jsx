@@ -100,15 +100,21 @@ export default function Bills() {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>Factures</Typography>
+    <Box p={{ xs: 1, md: 4 }}>
+      <Typography variant="h4" sx={{ fontWeight: 700, color: 'primary.main', mb: 3 }}>Factures</Typography>
 
-      {statusMsg.loading && <CircularProgress />}
-      {statusMsg.error && <Alert severity="error" onClose={() => setStatusMsg(s => ({ ...s, error: null }))}>{statusMsg.error}</Alert>}
-      {statusMsg.success && <Alert severity="success" onClose={() => setStatusMsg(s => ({ ...s, success: null }))}>{statusMsg.success}</Alert>}
+      {statusMsg.loading && <Box display="flex" justifyContent="center" my={3}><CircularProgress /></Box>}
+      {statusMsg.error && <Alert severity="error" sx={{ borderRadius: 2, fontSize: 16, mb: 2 }} onClose={() => setStatusMsg(s => ({ ...s, error: null }))}>{statusMsg.error}</Alert>}
+      {statusMsg.success && <Alert severity="success" sx={{ borderRadius: 2, fontSize: 16, mb: 2 }} onClose={() => setStatusMsg(s => ({ ...s, success: null }))}>{statusMsg.success}</Alert>}
 
-      <Paper component="form" onSubmit={handleSubmit} sx={{ p: 3, mb: 3 }}>
-        <Typography variant="h6" gutterBottom>Ajouter une facture</Typography>
+      <Paper component="form" onSubmit={handleSubmit} elevation={3} sx={{
+        p: { xs: 2, md: 3 },
+        mb: 4,
+        borderRadius: 3,
+        boxShadow: '0 2px 16px 0 rgba(25, 118, 210, 0.08)',
+        bgcolor: 'background.paper',
+      }}>
+        <Typography variant="h6" gutterBottom sx={{ fontWeight: 700, color: 'primary.main', mb: 2 }}>Ajouter une facture</Typography>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6} md={3}>
             <TextField
@@ -119,14 +125,17 @@ export default function Bills() {
               required
               value={formData.amount}
               onChange={handleChange}
-              InputProps={{ startAdornment: currency + ' ' }}
+              InputProps={{
+                startAdornment: <span style={{ color: '#1976d2', fontWeight: 600 }}>{currency}</span>,
+                sx: { borderRadius: 2, fontWeight: 600 }
+              }}
               inputProps={{ step: "0.01", min: "0" }}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <FormControl fullWidth required>
+            <FormControl fullWidth required sx={{ borderRadius: 2 }}>
               <InputLabel>Catégorie</InputLabel>
-              <Select name="categoryId" value={formData.categoryId} onChange={handleChange} label="Catégorie">
+              <Select name="categoryId" value={formData.categoryId} onChange={handleChange} label="Catégorie" sx={{ borderRadius: 2 }}>
                 {categories.map(c => (
                   <MenuItem key={c.id} value={c.id}>{c.name}</MenuItem>
                 ))}
@@ -143,12 +152,13 @@ export default function Bills() {
               value={formData.date}
               onChange={handleChange}
               InputLabelProps={{ shrink: true }}
+              sx={{ borderRadius: 2 }}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <FormControl fullWidth required>
+            <FormControl fullWidth required sx={{ borderRadius: 2 }}>
               <InputLabel>Statut</InputLabel>
-              <Select name="status" value={formData.status} onChange={handleChange} label="Statut">
+              <Select name="status" value={formData.status} onChange={handleChange} label="Statut" sx={{ borderRadius: 2 }}>
                 <MenuItem value="payée">Payée</MenuItem>
                 <MenuItem value="en attente">En attente</MenuItem>
               </Select>
@@ -162,43 +172,81 @@ export default function Bills() {
               value={formData.description}
               onChange={handleChange}
               placeholder="Facultatif"
+              sx={{ borderRadius: 2 }}
             />
           </Grid>
-          <Grid item xs={12} sx={{ textAlign: 'right' }}>
-            <Button variant="contained" color="primary" type="submit" startIcon={<AddIcon />}>
+          <Grid item xs={12} sx={{ textAlign: { xs: 'center', md: 'right' } }}>
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              startIcon={<AddIcon />}
+              sx={{
+                borderRadius: 3,
+                fontWeight: 600,
+                px: 3,
+                py: 1.2,
+                fontSize: 16,
+                boxShadow: '0 2px 8px 0 rgba(25, 118, 210, 0.08)',
+              }}
+            >
               Ajouter la facture
             </Button>
           </Grid>
         </Grid>
       </Paper>
 
-      <Paper sx={{ p: 3 }}>
-        <Typography variant="h6" gutterBottom>Historique des factures</Typography>
+      <Paper elevation={3} sx={{
+        p: { xs: 2, md: 3 },
+        borderRadius: 3,
+        boxShadow: '0 2px 16px 0 rgba(25, 118, 210, 0.08)',
+        bgcolor: 'background.paper',
+      }}>
+        <Typography variant="h6" gutterBottom sx={{ fontWeight: 700, color: 'primary.main', mb: 2 }}>Historique des factures</Typography>
         {bills.length === 0 ? (
-          <Typography sx={{ textAlign: 'center', py: 4 }} color="textSecondary">Aucune facture enregistrée.</Typography>
+          <Typography sx={{ textAlign: 'center', py: 4, fontSize: 18 }} color="textSecondary">Aucune facture enregistrée.</Typography>
         ) : (
-          <TableContainer>
+          <TableContainer sx={{ borderRadius: 3, boxShadow: '0 2px 12px 0 rgba(60,72,100,0.07)' }}>
             <Table>
               <TableHead>
-                <TableRow>
-                  <TableCell>Date</TableCell>
-                  <TableCell>Catégorie</TableCell>
-                  <TableCell>Description</TableCell>
-                  <TableCell>Statut</TableCell>
-                  <TableCell align="right">Montant</TableCell>
-                  <TableCell align="right">Actions</TableCell>
+                <TableRow sx={{ bgcolor: 'background.default' }}>
+                  <TableCell sx={{ fontWeight: 700, color: 'primary.main', fontSize: 16 }}>Date</TableCell>
+                  <TableCell sx={{ fontWeight: 700, color: 'primary.main', fontSize: 16 }}>Catégorie</TableCell>
+                  <TableCell sx={{ fontWeight: 700, color: 'primary.main', fontSize: 16 }}>Description</TableCell>
+                  <TableCell sx={{ fontWeight: 700, color: 'primary.main', fontSize: 16 }}>Statut</TableCell>
+                  <TableCell align="right" sx={{ fontWeight: 700, color: 'primary.main', fontSize: 16 }}>Montant</TableCell>
+                  <TableCell align="right" sx={{ fontWeight: 700, color: 'primary.main', fontSize: 16 }}>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {bills.map(bill => (
-                  <TableRow key={bill.id}>
+                {bills.map((bill, idx) => (
+                  <TableRow
+                    key={bill.id}
+                    sx={{
+                      bgcolor: idx % 2 === 0 ? 'background.default' : '#fff',
+                      transition: 'background 0.2s',
+                      '&:hover': { bgcolor: 'primary.50' },
+                    }}
+                  >
                     <TableCell>{new Date(bill.date).toLocaleDateString()}</TableCell>
                     <TableCell>{bill.categorie}</TableCell>
                     <TableCell>{bill.description || '-'}</TableCell>
-                    <TableCell>{bill.statut}</TableCell>
-                    <TableCell align="right">{formatCurrency(bill.montant)}</TableCell>
+                    <TableCell>
+                      <Box display="flex" alignItems="center" gap={1}>
+                        {bill.statut === 'payée' ? (
+                          <Box component="span" sx={{ display: 'flex', alignItems: 'center', color: 'success.main', fontWeight: 600 }}>
+                            <span style={{ fontSize: 18, marginRight: 4 }}>✔</span> Payée
+                          </Box>
+                        ) : (
+                          <Box component="span" sx={{ display: 'flex', alignItems: 'center', color: 'warning.main', fontWeight: 600 }}>
+                            <span style={{ fontSize: 18, marginRight: 4 }}>⏳</span> En attente
+                          </Box>
+                        )}
+                      </Box>
+                    </TableCell>
+                    <TableCell align="right" sx={{ fontWeight: 700, color: 'primary.main', fontSize: 16 }}>{formatCurrency(bill.montant)}</TableCell>
                     <TableCell align="right">
-                      <IconButton size="small" onClick={() => handleDelete(bill.id)} color="error">
+                      <IconButton size="small" onClick={() => handleDelete(bill.id)} color="error" sx={{ borderRadius: 2 }}>
                         <DeleteIcon fontSize="small" />
                       </IconButton>
                     </TableCell>

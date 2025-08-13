@@ -13,6 +13,12 @@ import {
   Divider,
   Button
 } from '@mui/material';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import MoneyOffIcon from '@mui/icons-material/MoneyOff';
+import CreditCardIcon from '@mui/icons-material/CreditCard';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import EventIcon from '@mui/icons-material/Event';
 import { useNavigate } from 'react-router-dom';
 // import axios from 'axios'; // Décommenter quand tu as un backend
 
@@ -60,76 +66,163 @@ const Dashboard = () => {
   const soldeNet = totalRevenus + totalDepenses + totalCredits;
 
   return (
-    <Box p={3}>
-      <Typography variant="h4" gutterBottom>
+    <Box p={{ xs: 1, md: 4 }}>
+      <Typography variant="h4" gutterBottom sx={{ fontWeight: 700, color: 'primary.main', mb: 3, textAlign: 'left' }}>
         Tableau de bord des Transactions
       </Typography>
 
       <Box mb={3} display="flex" justifyContent="flex-end">
-        <Button variant="contained" color="primary" onClick={() => navigate('/transactions/add-transaction')}>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<AddCircleOutlineIcon />}
+          onClick={() => navigate('/transactions/add-transaction')}
+          sx={{
+            borderRadius: 3,
+            fontWeight: 600,
+            px: 3,
+            py: 1.2,
+            fontSize: 16,
+            boxShadow: '0 2px 8px 0 rgba(25, 118, 210, 0.08)',
+          }}
+        >
           Ajouter une transaction
         </Button>
       </Box>
 
-      <Grid container spacing={2}>
+      <Grid container spacing={3} sx={{ mb: 2 }}>
         <Grid item xs={12} md={3}>
-          <Paper sx={{ p: 2, bgcolor: '#e8f5e9' }}>
-            <Typography variant="subtitle2">Revenus</Typography>
-            <Typography variant="h6" color="success.main">+{totalRevenus} {currency}</Typography>
+          <Paper elevation={3} sx={{
+            p: 2.5,
+            bgcolor: 'primary.main',
+            color: '#fff',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 2,
+            borderRadius: 3,
+            boxShadow: '0 2px 16px 0 rgba(25, 118, 210, 0.10)',
+          }}>
+            <AttachMoneyIcon color="inherit" fontSize="large" />
+            <Box>
+              <Typography variant="subtitle2" sx={{ opacity: 0.85 }}>Revenus</Typography>
+              <Typography variant="h6" sx={{ fontWeight: 700, fontSize: 22 }}>+{totalRevenus} {currency}</Typography>
+            </Box>
           </Paper>
         </Grid>
         <Grid item xs={12} md={3}>
-          <Paper sx={{ p: 2, bgcolor: '#ffebee' }}>
-            <Typography variant="subtitle2">Dépenses</Typography>
-            <Typography variant="h6" color="error.main">{totalDepenses} {currency}</Typography>
+          <Paper elevation={3} sx={{
+            p: 2.5,
+            bgcolor: 'error.main',
+            color: '#fff',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 2,
+            borderRadius: 3,
+            boxShadow: '0 2px 16px 0 rgba(229, 57, 53, 0.10)',
+          }}>
+            <MoneyOffIcon color="inherit" fontSize="large" />
+            <Box>
+              <Typography variant="subtitle2" sx={{ opacity: 0.85 }}>Dépenses</Typography>
+              <Typography variant="h6" sx={{ fontWeight: 700, fontSize: 22 }}>{totalDepenses} {currency}</Typography>
+            </Box>
           </Paper>
         </Grid>
         <Grid item xs={12} md={3}>
-          <Paper sx={{ p: 2, bgcolor: '#fff3e0' }}>
-            <Typography variant="subtitle2">Crédits</Typography>
-            <Typography variant="h6" color="warning.main">{totalCredits} {currency}</Typography>
+          <Paper elevation={3} sx={{
+            p: 2.5,
+            bgcolor: 'warning.main',
+            color: '#fff',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 2,
+            borderRadius: 3,
+            boxShadow: '0 2px 16px 0 rgba(255, 167, 38, 0.10)',
+          }}>
+            <CreditCardIcon color="inherit" fontSize="large" />
+            <Box>
+              <Typography variant="subtitle2" sx={{ opacity: 0.85 }}>Crédits</Typography>
+              <Typography variant="h6" sx={{ fontWeight: 700, fontSize: 22 }}>{totalCredits} {currency}</Typography>
+            </Box>
           </Paper>
         </Grid>
         <Grid item xs={12} md={3}>
-          <Paper sx={{ p: 2 }}>
-            <Typography variant="subtitle2">Solde Net</Typography>
-            <Typography variant="h6" color={soldeNet >= 0 ? 'success.main' : 'error.main'}>
-              {soldeNet >= 0 ? '+' : ''}{soldeNet} {currency}
-            </Typography>
+          <Paper elevation={3} sx={{
+            p: 2.5,
+            bgcolor: soldeNet >= 0 ? 'success.main' : 'error.main',
+            color: '#fff',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 2,
+            borderRadius: 3,
+            boxShadow: '0 2px 16px 0 rgba(67, 160, 71, 0.10)',
+          }}>
+            <AccountBalanceWalletIcon color="inherit" fontSize="large" />
+            <Box>
+              <Typography variant="subtitle2" sx={{ opacity: 0.85 }}>Solde Net</Typography>
+              <Typography variant="h6" sx={{ fontWeight: 700, fontSize: 22 }}>
+                {soldeNet >= 0 ? '+' : ''}{soldeNet} {currency}
+              </Typography>
+            </Box>
           </Paper>
         </Grid>
       </Grid>
 
-      {Object.keys(groupedTransactions).map((category) => (
-        <Box key={category} sx={{ mt: 5 }}>
-          <Typography variant="h6" gutterBottom>
-            {category}
-          </Typography>
-          <Divider sx={{ mb: 2 }} />
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Libellé</TableCell>
-                  <TableCell>Montant</TableCell>
-                  <TableCell>Date</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {groupedTransactions[category].map((txn) => (
-                  <TableRow key={txn.id}>
-                    <TableCell>{txn.label}</TableCell>
-                    <TableCell sx={{ color: txn.amount < 0 ? 'error.main' : 'success.main' }}>
-                      {txn.amount < 0 ? '-' : '+'}{Math.abs(txn.amount)} {currency}
-                    </TableCell>
-                    <TableCell>{txn.date}</TableCell>
+      {Object.keys(groupedTransactions).map((category) => {
+        let icon;
+        if (category === 'Revenu') icon = <AttachMoneyIcon color="success" />;
+        else if (category === 'Dépense') icon = <MoneyOffIcon color="error" />;
+        else if (category === 'Crédit') icon = <CreditCardIcon color="warning" />;
+        else icon = <AccountBalanceWalletIcon color="primary" />;
+
+        return (
+          <Box key={category} sx={{ mt: 5 }}>
+            <Box display="flex" alignItems="center" gap={1}>
+              {icon}
+              <Typography variant="h6" gutterBottom sx={{ fontWeight: 700, color: 'text.primary' }}>
+                {category}
+              </Typography>
+            </Box>
+            <Divider sx={{ mb: 2 }} />
+            <TableContainer component={Paper} sx={{ borderRadius: 3, boxShadow: '0 2px 12px 0 rgba(60,72,100,0.07)' }}>
+              <Table>
+                <TableHead>
+                  <TableRow sx={{ bgcolor: 'background.default' }}>
+                    <TableCell sx={{ fontWeight: 700, color: 'primary.main', fontSize: 16 }}>Libellé</TableCell>
+                    <TableCell sx={{ fontWeight: 700, color: 'primary.main', fontSize: 16 }}>Montant</TableCell>
+                    <TableCell sx={{ fontWeight: 700, color: 'primary.main', fontSize: 16 }}>Date</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Box>
-      ))}
+                </TableHead>
+                <TableBody>
+                  {groupedTransactions[category].map((txn, idx) => (
+                    <TableRow
+                      key={txn.id}
+                      sx={{
+                        bgcolor: idx % 2 === 0 ? 'background.default' : '#fff',
+                        transition: 'background 0.2s',
+                        '&:hover': { bgcolor: 'primary.50' },
+                      }}
+                    >
+                      <TableCell>
+                        <Box display="flex" alignItems="center" gap={1}>
+                          <EventIcon fontSize="small" color="action" />
+                          <span style={{ fontWeight: 500 }}>{txn.label}</span>
+                        </Box>
+                      </TableCell>
+                      <TableCell sx={{ color: txn.amount < 0 ? 'error.main' : 'success.main', fontWeight: 700, fontSize: 16 }}>
+                        {txn.amount < 0 ? '-' : '+'}{Math.abs(txn.amount)} {currency}
+                      </TableCell>
+                      <TableCell>
+                        <EventIcon fontSize="small" color="disabled" sx={{ mr: 0.5 }} />
+                        <span style={{ fontWeight: 500 }}>{txn.date}</span>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
+        );
+      })}
     </Box>
   );
 };

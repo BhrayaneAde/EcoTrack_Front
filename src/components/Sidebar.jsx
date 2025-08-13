@@ -31,6 +31,7 @@ const menuItems = [
   { text: 'Paramètres', icon: <SettingsIcon />, path: '/settings' },
 ];
 
+
 const Sidebar = () => {
   const location = useLocation();
 
@@ -40,23 +41,47 @@ const Sidebar = () => {
       sx={{
         width: drawerWidth,
         flexShrink: 0,
-        [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
+        [`& .MuiDrawer-paper`]: {
+          width: drawerWidth,
+          boxSizing: 'border-box',
+          background: 'linear-gradient(135deg, #1976d2 0%, #43a047 100%)',
+          color: '#fff',
+          borderTopRightRadius: 24,
+          borderBottomRightRadius: 24,
+          boxShadow: '2px 0 16px 0 rgba(25, 118, 210, 0.08)',
+          border: 'none',
+        },
       }}
     >
-      <Toolbar />
-      <List>
+      <Toolbar sx={{ justifyContent: 'center', minHeight: 80 }}>
+        <img src="/vite.svg" alt="EcoTrack" style={{ height: 38, marginRight: 8 }} />
+        <span style={{ fontWeight: 700, fontSize: 22, letterSpacing: 1 }}>EcoTrack</span>
+      </Toolbar>
+      <List sx={{ mt: 2 }}>
         {menuItems.map((item, index) =>
           item.divider ? (
-            <Divider key={`divider-${index}`} sx={{ my: 1 }} />
+            <Divider key={`divider-${index}`} sx={{ my: 1, bgcolor: 'rgba(255,255,255,0.15)' }} />
           ) : (
-            <ListItem key={item.text} disablePadding>
+            <ListItem key={item.text} disablePadding sx={{ mb: 0.5 }}>
               <ListItemButton
                 component={Link}
                 to={item.path}
                 selected={location.pathname === item.path}
+                sx={{
+                  borderRadius: 8,
+                  mx: 1,
+                  background: location.pathname === item.path ? 'rgba(255,255,255,0.18)' : 'transparent',
+                  boxShadow: location.pathname === item.path ? '0 2px 8px 0 rgba(60,72,100,0.10)' : 'none',
+                  color: location.pathname === item.path ? '#fff' : 'rgba(255,255,255,0.85)',
+                  fontWeight: location.pathname === item.path ? 700 : 500,
+                  transition: 'all 0.2s',
+                  '&:hover': {
+                    background: 'rgba(255,255,255,0.10)',
+                  },
+                }}
               >
-                <ListItemIcon sx={{ color: 'inherit' }}>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} />
+                <ListItemIcon sx={{ color: 'inherit', minWidth: 38 }}>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} primaryTypographyProps={{ fontWeight: location.pathname === item.path ? 700 : 500 }} />
               </ListItemButton>
             </ListItem>
           )

@@ -89,15 +89,25 @@ export default function Credits() {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>Crédits</Typography>
+    <Box p={{ xs: 1, md: 4 }}>
+      <Typography variant="h4" gutterBottom sx={{ fontWeight: 700, color: 'warning.main', mb: 3, textAlign: 'left' }}>
+        Crédits
+      </Typography>
 
-      {statusMsg.loading && <CircularProgress />}
-      {statusMsg.error && <Alert severity="error" onClose={() => setStatusMsg(s => ({ ...s, error: null }))}>{statusMsg.error}</Alert>}
-      {statusMsg.success && <Alert severity="success" onClose={() => setStatusMsg(s => ({ ...s, success: null }))}>{statusMsg.success}</Alert>}
+      {statusMsg.loading && <Box display="flex" justifyContent="center" my={2}><CircularProgress /></Box>}
+      {statusMsg.error && <Alert severity="error" sx={{ mb: 2, borderRadius: 2, fontSize: 16 }} onClose={() => setStatusMsg(s => ({ ...s, error: null }))}>{statusMsg.error}</Alert>}
+      {statusMsg.success && <Alert severity="success" sx={{ mb: 2, borderRadius: 2, fontSize: 16 }} onClose={() => setStatusMsg(s => ({ ...s, success: null }))}>{statusMsg.success}</Alert>}
 
-      <Paper component="form" onSubmit={handleSubmit} sx={{ p: 3, mb: 3 }}>
-        <Typography variant="h6" gutterBottom>Ajouter un crédit</Typography>
+      <Paper component="form" onSubmit={handleSubmit} elevation={3} sx={{
+        p: { xs: 2, md: 3 },
+        mb: 4,
+        borderRadius: 3,
+        boxShadow: '0 2px 16px 0 rgba(255, 167, 38, 0.08)',
+        bgcolor: 'background.paper',
+      }}>
+        <Typography variant="h6" gutterBottom sx={{ fontWeight: 700, color: 'warning.main', mb: 2 }}>
+          Ajouter un crédit
+        </Typography>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6} md={4}>
             <TextField
@@ -108,7 +118,7 @@ export default function Credits() {
               required
               value={formData.amount}
               onChange={handleChange}
-              InputProps={{ startAdornment: currency + ' ' }}
+              InputProps={{ startAdornment: <span style={{ color: '#ffa726', fontWeight: 600 }}>{currency}</span>, sx: { borderRadius: 2, fontWeight: 600 } }}
               inputProps={{ step: "0.01", min: "0" }}
             />
           </Grid>
@@ -122,6 +132,7 @@ export default function Credits() {
               value={formData.interestRate}
               onChange={handleChange}
               inputProps={{ step: "0.01", min: "0" }}
+              sx={{ borderRadius: 2 }}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
@@ -134,6 +145,7 @@ export default function Credits() {
               value={formData.startDate}
               onChange={handleChange}
               InputLabelProps={{ shrink: true }}
+              sx={{ borderRadius: 2 }}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
@@ -146,6 +158,7 @@ export default function Credits() {
               value={formData.endDate}
               onChange={handleChange}
               InputLabelProps={{ shrink: true }}
+              sx={{ borderRadius: 2 }}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
@@ -157,7 +170,7 @@ export default function Credits() {
               required
               value={formData.monthlyPayment}
               onChange={handleChange}
-              InputProps={{ startAdornment: currency + ' ' }}
+              InputProps={{ startAdornment: <span style={{ color: '#ffa726', fontWeight: 600 }}>{currency}</span>, sx: { borderRadius: 2, fontWeight: 600 } }}
               inputProps={{ step: "0.01", min: "0" }}
             />
           </Grid>
@@ -169,37 +182,61 @@ export default function Credits() {
               value={formData.description}
               onChange={handleChange}
               placeholder="Facultatif"
+              sx={{ borderRadius: 2 }}
             />
           </Grid>
-          <Grid item xs={12} sx={{ textAlign: 'right' }}>
-            <Button variant="contained" color="primary" type="submit" startIcon={<AddIcon />}>
+          <Grid item xs={12} sx={{ textAlign: { xs: 'center', md: 'right' }, mt: 2 }}>
+            <Button variant="contained" color="warning" type="submit" startIcon={<AddIcon />}
+              sx={{
+                borderRadius: 3,
+                fontWeight: 600,
+                px: 3,
+                py: 1.2,
+                fontSize: 16,
+                boxShadow: '0 2px 8px 0 rgba(255, 167, 38, 0.08)',
+              }}
+            >
               Ajouter le crédit
             </Button>
           </Grid>
         </Grid>
       </Paper>
 
-      <Paper sx={{ p: 3 }}>
-        <Typography variant="h6" gutterBottom>Historique des crédits</Typography>
+      <Paper elevation={3} sx={{
+        p: { xs: 2, md: 3 },
+        borderRadius: 3,
+        boxShadow: '0 2px 16px 0 rgba(255, 167, 38, 0.08)',
+        bgcolor: 'background.paper',
+      }}>
+        <Typography variant="h6" gutterBottom sx={{ fontWeight: 700, color: 'warning.main', mb: 2 }}>
+          Historique des crédits
+        </Typography>
         {credits.length === 0 ? (
           <Typography sx={{ textAlign: 'center', py: 4 }} color="textSecondary">Aucun crédit enregistré.</Typography>
         ) : (
-          <TableContainer>
+          <TableContainer sx={{ borderRadius: 3, boxShadow: '0 2px 12px 0 rgba(60,72,100,0.07)' }}>
             <Table>
               <TableHead>
-                <TableRow>
-                  <TableCell>Montant</TableCell>
-                  <TableCell>Taux d'intérêt (%)</TableCell>
-                  <TableCell>Date début</TableCell>
-                  <TableCell>Date fin</TableCell>
-                  <TableCell>Mensualité</TableCell>
-                  <TableCell>Description</TableCell>
-                  <TableCell align="right">Actions</TableCell>
+                <TableRow sx={{ bgcolor: 'background.default' }}>
+                  <TableCell sx={{ fontWeight: 700, color: 'warning.main', fontSize: 16 }}>Montant</TableCell>
+                  <TableCell sx={{ fontWeight: 700, color: 'warning.main', fontSize: 16 }}>Taux d'intérêt (%)</TableCell>
+                  <TableCell sx={{ fontWeight: 700, color: 'warning.main', fontSize: 16 }}>Date début</TableCell>
+                  <TableCell sx={{ fontWeight: 700, color: 'warning.main', fontSize: 16 }}>Date fin</TableCell>
+                  <TableCell sx={{ fontWeight: 700, color: 'warning.main', fontSize: 16 }}>Mensualité</TableCell>
+                  <TableCell sx={{ fontWeight: 700, color: 'warning.main', fontSize: 16 }}>Description</TableCell>
+                  <TableCell align="right" sx={{ fontWeight: 700, color: 'warning.main', fontSize: 16 }}>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {credits.map(c => (
-                  <TableRow key={c.id}>
+                {credits.map((c, idx) => (
+                  <TableRow
+                    key={c.id}
+                    sx={{
+                      bgcolor: idx % 2 === 0 ? 'background.default' : '#fff',
+                      transition: 'background 0.2s',
+                      '&:hover': { bgcolor: 'warning.50' },
+                    }}
+                  >
                     <TableCell>{formatCurrency(c.montant)}</TableCell>
                     <TableCell>{c.tauxInteret}</TableCell>
                     <TableCell>{new Date(c.dateDebut).toLocaleDateString()}</TableCell>
@@ -207,7 +244,7 @@ export default function Credits() {
                     <TableCell>{formatCurrency(c.mensualite)}</TableCell>
                     <TableCell>{c.description || '-'}</TableCell>
                     <TableCell align="right">
-                      <IconButton size="small" onClick={() => handleDelete(c.id)} color="error">
+                      <IconButton size="small" onClick={() => handleDelete(c.id)} color="error" sx={{ borderRadius: 2 }}>
                         <DeleteIcon fontSize="small" />
                       </IconButton>
                     </TableCell>
